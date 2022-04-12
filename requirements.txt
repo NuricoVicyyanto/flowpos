@@ -1,0 +1,5 @@
+keras==2.8.0
+Keras-Preprocessing==1.1.2
+numpy==1.22.3
+Pillow==9.0.1
+python-telegram-bot==13.11
