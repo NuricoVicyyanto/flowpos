@@ -17,9 +17,13 @@ with open('token.txt', 'r') as f:
 updater = Updater(TOKEN, use_context=True)
 
 # function
+
+
 def start(update, context):
-    #bold
-    update.message.reply_text("*Selamat datang di Clasifibot tekan /info untuk informasi lebih lanjut*", parse_mode=telegram.ParseMode.MARKDOWN_V2)
+    # bold
+    update.message.reply_text(
+        "*Selamat datang di Clasifibot tekan /info untuk informasi lebih lanjut*", parse_mode=telegram.ParseMode.MARKDOWN_V2)
+
 
 def info(update, context):
     update.message.reply_text("""Perintah yang tersedia :
@@ -35,8 +39,10 @@ def info(update, context):
     - Tanaman Lili perdamaian(spathipyllum)
     """)
 
+
 def unknown(update, context):
-    update.message.reply_text("Maaf, perintah '%s' tidak dikenal" % update.message.text)
+    update.message.reply_text(
+        "Maaf, perintah '%s' tidak dikenal" % update.message.text)
 
 
 def save(update, context):
@@ -51,20 +57,24 @@ def save(update, context):
     model = load_model('./ml/flowpos2.h5')
 
     # machine learning prediction
-    test_image =image.load_img("images/"+chat_id+".jpg",target_size =(64,64))
-    test_image =image.img_to_array(test_image)
-    test_image =np.expand_dims(test_image, axis =0)
+    test_image = image.load_img("images/"+chat_id+".jpg", target_size=(64, 64))
+    test_image = image.img_to_array(test_image)
+    test_image = np.expand_dims(test_image, axis=0)
     result = model.predict(test_image)
     if result[0][0] == 1:
         update.message.reply_text("Diklasifikasikan sebagai Keladi(Caladium)")
     elif result[0][1] == 1:
-        update.message.reply_text("Diklasifikasikan sebagai Daun Bahagia(Dieffenbachia)")
+        update.message.reply_text(
+            "Diklasifikasikan sebagai Daun Bahagia(Dieffenbachia)")
     elif result[0][2] == 1:
-        update.message.reply_text("Diklasifikasikan sebagai Janda Sobek(Monstera)")
+        update.message.reply_text(
+            "Diklasifikasikan sebagai Janda Sobek(Monstera)")
     elif result[0][3] == 1:
-        update.message.reply_text("Diklasifikasikan sebagai Oleander(Nerium Oleander)")
-    elif result[0][4]  == 1:
-        update.message.reply_text("Diklasifikasikan sebagai Lili perdamaian(spathipyllum)")
+        update.message.reply_text(
+            "Diklasifikasikan sebagai Oleander(Nerium Oleander)")
+    elif result[0][4] == 1:
+        update.message.reply_text(
+            "Diklasifikasikan sebagai Lili perdamaian(spathipyllum)")
     else:
         update.message.reply_text("Gagal Diklasifikasi")
 
