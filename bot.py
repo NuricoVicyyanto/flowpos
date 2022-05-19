@@ -17,32 +17,34 @@ with open('token.txt', 'r') as f:
 updater = Updater(TOKEN, use_context=True)
 
 # function
-
-
 def start(update, context):
-    # bold
-    update.message.reply_text(
-        "*Selamat datang di Clasifibot tekan /info untuk informasi lebih lanjut*", parse_mode=telegram.ParseMode.MARKDOWN_V2)
-
+    #bold
+    update.message.reply_text("*Selamat datang di Clasifibot tekan /info untuk informasi lebih lanjut*", parse_mode=telegram.ParseMode.MARKDOWN_V2)
 
 def info(update, context):
-    update.message.reply_text("""Perintah yang tersedia :
-    - /start untuk memulai bot
-    - /info  untuk mengetahui info bot
+    update.message.reply_text("""Selamat datang di Clasifibot
 
-    kirim gambar dengan format jpg untuk mendeteksi jenis bunga, 
+    Perintah yang tersedia :
+    - /start untuk memulai bot
+    - /info  untuk informasi mengenai bot
+
+    Panduan :
+    kirim gambar dengan format jpg dengan file terkompresi untuk 
+    mendeteksi jenis tanaman hias,
+
     Bot ini dapat mendeteksi 5 jenis bunga yaitu :
     - Tanaman Keladi(Caladium)
     - Tanaman Daun Bahagia(Dieffenbachia)
     - Tanaman Janda Sobek(Monstera)
     - Tanaman Oleander(Nerium Oleander)
     - Tanaman Lili perdamaian(spathipyllum)
+
+    Sumber :
+    - https://libguides.nybg.org/poisonoushouseplants
     """)
 
-
 def unknown(update, context):
-    update.message.reply_text(
-        "Maaf, perintah '%s' tidak dikenal" % update.message.text)
+    update.message.reply_text("Maaf, perintah '%s' tidak dikenal" % update.message.text)
 
 
 def save(update, context):
@@ -57,26 +59,22 @@ def save(update, context):
     model = load_model('./ml/flowpos2.h5')
 
     # machine learning prediction
-    test_image = image.load_img("images/"+chat_id+".jpg", target_size=(64, 64))
-    test_image = image.img_to_array(test_image)
-    test_image = np.expand_dims(test_image, axis=0)
+    test_image =image.load_img("images/"+chat_id+".jpg",target_size =(64,64))
+    test_image =image.img_to_array(test_image)
+    test_image =np.expand_dims(test_image, axis =0)
     result = model.predict(test_image)
-    if result[0][0] == 1:
-        update.message.reply_text("Diklasifikasikan sebagai Keladi(Caladium)")
-    elif result[0][1] == 1:
-        update.message.reply_text(
-            "Diklasifikasikan sebagai Daun Bahagia(Dieffenbachia)")
-    elif result[0][2] == 1:
-        update.message.reply_text(
-            "Diklasifikasikan sebagai Janda Sobek(Monstera)")
-    elif result[0][3] == 1:
-        update.message.reply_text(
-            "Diklasifikasikan sebagai Oleander(Nerium Oleander)")
-    elif result[0][4] == 1:
-        update.message.reply_text(
-            "Diklasifikasikan sebagai Lili perdamaian(spathipyllum)")
+    if result[0][0] >= 0.8:
+        update.message.reply_text("*Klasifikasi* \nTanaman diklasifikasikan sebagai Keladi, _Caladium_ \n\n*Bagian beracun* \nSemua bagian tanaman mengandung kalsium oksalat \n\n*Gejala yang ditimbulkan* \nIritasi parah pada selaput lendir menghasilkan pembengkakan lidah, bibir dan langitlangit", parse_mode=telegram.ParseMode.MARKDOWN_V2)
+    elif result[0][1] >= 0.8:
+        update.message.reply_text("*Klasifikasi* \nTanaman diklasifikasikan sebagai Daun Bahagia, _Dieffenbachia_ \n\n*Bagian beracun* \nSemua bagian tanaman mengandung kalsium oksalat \n\n*Gejala yang ditimbulkan* \nIritasi parah pada selaput lendir menghasilkan pembengkakan lidah, bibir dan langitlangit", parse_mode=telegram.ParseMode.MARKDOWN_V2)
+    elif result[0][2] >= 0.8:
+        update.message.reply_text("*Klasifikasi* \nTanaman diklasifikasikan sebagai Janda Sobek, _Monstera_ \n\n*Bagian beracun* \nDaunnya mengandung kalsium oksalat \n\n*Gejala yang ditimbulkan* \nIritasi parah pada selaput lendir menghasilkan pembengkakan lidah, bibir dan langitlangit", parse_mode=telegram.ParseMode.MARKDOWN_V2)
+    elif result[0][3] >= 0.8:
+        update.message.reply_text("*Klasifikasi* \nTanaman diklasifikasikan sebagai Oleander, _Nerum Oleander_ \n\n*Bagian beracun* \nSemua bagian mengandung glikosida \n\n*Gejala yang ditimbulkan* \nSatu daun berakibat fatal dan akan mengganggu fungsi jantung, memicu kegagalan peredaran darah dan menyebabkan kematian", parse_mode=telegram.ParseMode.MARKDOWN_V2)
+    elif result[0][4]  >= 0.8:
+        update.message.reply_text("*Klasifikasi* \nTanaman diklasifikasikan sebagai Lily Perdamaian, _Spathipyllum_ \n\n*Bagian beracun* \nDaunnya mengandung kalsium oksalat \n\n*Gejala yang ditimbulkan* \nIritasi parah pada selaput lendir menghasilkan pembengkakan lidah, bibir dan langitlangit", parse_mode=telegram.ParseMode.MARKDOWN_V2)
     else:
-        update.message.reply_text("Gagal Diklasifikasi")
+        update.message.reply_text("Gagal diklasifikasi")
 
 
 # command bot
