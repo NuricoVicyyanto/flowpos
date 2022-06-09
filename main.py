@@ -17,9 +17,13 @@ with open('token.txt', 'r') as f:
 updater = Updater(TOKEN, use_context=True)
 
 # function
+
+
 def start(update, context):
-    #bold
-    update.message.reply_text("*Selamat datang di Clasifibot tekan /info untuk informasi lebih lanjut*", parse_mode=telegram.ParseMode.MARKDOWN_V2)
+    # bold
+    update.message.reply_text(
+        "*Selamat datang di Clasifibot tekan /info untuk informasi lebih lanjut*", parse_mode=telegram.ParseMode.MARKDOWN_V2)
+
 
 def info(update, context):
     update.message.reply_text("""Selamat datang di Clasifibot
@@ -43,8 +47,10 @@ def info(update, context):
     - https://libguides.nybg.org/poisonoushouseplants
     """)
 
+
 def unknown(update, context):
-    update.message.reply_text("Maaf, perintah '%s' tidak dikenal" % update.message.text)
+    update.message.reply_text(
+        "Maaf, perintah '%s' tidak dikenal" % update.message.text)
 
 
 def save(update, context):
@@ -59,9 +65,9 @@ def save(update, context):
     model = load_model('./model/flowpos2.h5')
 
     # machine learning prediction
-    test_image =image.load_img("images/"+chat_id+".jpg",target_size =(64,64))
-    test_image =image.img_to_array(test_image)
-    test_image =np.expand_dims(test_image, axis =0)
+    test_image = image.load_img("images/"+chat_id+".jpg", target_size=(64, 64))
+    test_image = image.img_to_array(test_image)
+    test_image = np.expand_dims(test_image, axis=0)
     result = model.predict(test_image)
     if result[0][0] >= 0.8:
         update.message.reply_text("*Klasifikasi* \nTanaman diklasifikasikan sebagai Keladi, _Caladium_ \n\n*Bagian beracun* \nSemua bagian tanaman mengandung kalsium oksalat \n\n*Gejala yang ditimbulkan* \nIritasi parah pada selaput lendir menghasilkan pembengkakan lidah, bibir dan langitlangit", parse_mode=telegram.ParseMode.MARKDOWN_V2)
@@ -71,7 +77,7 @@ def save(update, context):
         update.message.reply_text("*Klasifikasi* \nTanaman diklasifikasikan sebagai Janda Sobek, _Monstera_ \n\n*Bagian beracun* \nDaunnya mengandung kalsium oksalat \n\n*Gejala yang ditimbulkan* \nIritasi parah pada selaput lendir menghasilkan pembengkakan lidah, bibir dan langitlangit", parse_mode=telegram.ParseMode.MARKDOWN_V2)
     elif result[0][3] >= 0.8:
         update.message.reply_text("*Klasifikasi* \nTanaman diklasifikasikan sebagai Oleander, _Nerum Oleander_ \n\n*Bagian beracun* \nSemua bagian mengandung glikosida \n\n*Gejala yang ditimbulkan* \nSatu daun berakibat fatal dan akan mengganggu fungsi jantung, memicu kegagalan peredaran darah dan menyebabkan kematian", parse_mode=telegram.ParseMode.MARKDOWN_V2)
-    elif result[0][4]  >= 0.8:
+    elif result[0][4] >= 0.8:
         update.message.reply_text("*Klasifikasi* \nTanaman diklasifikasikan sebagai Lily Perdamaian, _Spathipyllum_ \n\n*Bagian beracun* \nDaunnya mengandung kalsium oksalat \n\n*Gejala yang ditimbulkan* \nIritasi parah pada selaput lendir menghasilkan pembengkakan lidah, bibir dan langitlangit", parse_mode=telegram.ParseMode.MARKDOWN_V2)
     else:
         update.message.reply_text("Gagal diklasifikasi")
