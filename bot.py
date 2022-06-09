@@ -56,7 +56,7 @@ def save(update, context):
     update.message.reply_photo(open("images/"+chat_id+".jpg", "rb"))
 
     # load machine learning model
-    model = load_model('./ml/flowpos2.h5')
+    model = load_model('./model/flowpos2.h5')
 
     # machine learning prediction
     test_image =image.load_img("images/"+chat_id+".jpg",target_size =(64,64))
