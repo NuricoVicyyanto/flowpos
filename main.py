@@ -16,8 +16,6 @@ with open('token.txt', 'r') as f:
 # telegram token
 updater = Updater(TOKEN, use_context=True)
 
-# function
-
 
 def start(update, context):
     # bold
