@@ -19,22 +19,24 @@ updater = Updater(TOKEN, use_context=True)
 
 def start(update, context):
     # bold
-    update.message.reply_text(
-        "*Selamat datang di Clasifibot tekan /info untuk informasi lebih lanjut*", parse_mode=telegram.ParseMode.MARKDOWN_V2)
+    update.message.reply_text("""
+    *Selamat datang di FlowBot*
+    FlowBot merupakan bot yang dapat membantu anda mengenali tanaman hias beracun, tekan /info untuk informasi lebih lanjut""", parse_mode=telegram.ParseMode.MARKDOWN_V2)
 
 
 def info(update, context):
-    update.message.reply_text("""Selamat datang di Clasifibot
+    update.message.reply_text("""Selamat datang di FlowBot
 
     Perintah yang tersedia :
     - /start untuk memulai bot
     - /info  untuk informasi mengenai bot
+    - /show untuk menampilkan contoh gambar tanaman beracun
 
     Panduan :
     kirim gambar dengan format jpg dengan file terkompresi untuk 
     mendeteksi jenis tanaman hias,
 
-    Bot ini dapat mendeteksi 5 jenis bunga yaitu :
+    Bot ini dapat mendeteksi 5 jenis tanaman yaitu :
     - Tanaman Keladi(Caladium)
     - Tanaman Daun Bahagia(Dieffenbachia)
     - Tanaman Janda Sobek(Monstera)
@@ -44,6 +46,19 @@ def info(update, context):
     Sumber :
     - https://libguides.nybg.org/poisonoushouseplants
     """)
+
+def show(update, context):
+    update.message.reply_photo(open('data/caladium.jpg', 'rb'))
+    update.message.reply_text("Tanaman Keladi(Caladium)")
+    update.message.reply_photo(open('data/dieffenbachia.jpg', 'rb'))
+    update.message.reply_text("Tanaman Daun Bahagia(Dieffenbachia)")
+    update.message.reply_photo(open('data/monstera.jpg', 'rb'))
+    update.message.reply_text("Tanaman Janda Sobek(Monstera)")
+    update.message.reply_photo(open('data/oleander.jpg', 'rb'))
+    update.message.reply_text("Tanaman Oleander(Nerium Oleander)")
+    update.message.reply_photo(open('data/spathipyllum.jpg', 'rb'))
+    update.message.reply_text("Tanaman Lili perdamaian(spathipyllum)")
+
 
 
 def unknown(update, context):
@@ -84,6 +99,7 @@ def save(update, context):
 # command bot
 updater.dispatcher.add_handler(CommandHandler("start", start))
 updater.dispatcher.add_handler(CommandHandler("info", info))
+updater.dispatcher.add_handler(CommandHandler("show", show))
 updater.dispatcher.add_handler(MessageHandler(Filters.text, unknown))
 
 # add Message Handler
