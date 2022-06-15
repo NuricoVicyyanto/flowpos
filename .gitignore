@@ -5750,3 +5750,5 @@ env/Scripts/pip3.10.exe
 env/Scripts/pip3.exe
 env/Scripts/python.exe
 env/Scripts/pythonw.exe
+aiToken.txt
+token.txt
