@@ -3,6 +3,8 @@ import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from random import randint
 from io import BytesIO
+import openai
+import os
 
 # machine learning
 from keras.models import load_model
@@ -12,6 +14,11 @@ from keras.preprocessing import image
 
 with open('token.txt', 'r') as f:
     TOKEN = f.read()
+
+# with open('aiToken.txt', 'r') as f:
+#     AI_TOKEN = f.read()
+
+# openai.api_key = AI_TOKEN
 
 # telegram token
 updater = Updater(TOKEN, use_context=True)
@@ -47,6 +54,7 @@ def info(update, context):
     - https://libguides.nybg.org/poisonoushouseplants
     """)
 
+
 def show(update, context):
     update.message.reply_photo(open('data/caladium.jpg', 'rb'))
     update.message.reply_text("Tanaman Keladi(Caladium)")
@@ -58,12 +66,6 @@ def show(update, context):
     update.message.reply_text("Tanaman Oleander(Nerium Oleander)")
     update.message.reply_photo(open('data/spathipyllum.jpg', 'rb'))
     update.message.reply_text("Tanaman Lili perdamaian(spathipyllum)")
-
-
-
-def unknown(update, context):
-    update.message.reply_text(
-        "Maaf, perintah '%s' tidak dikenal" % update.message.text)
 
 
 def save(update, context):
@@ -84,6 +86,7 @@ def save(update, context):
     result = model.predict(test_image)
     if result[0][0] >= 0.8:
         update.message.reply_text("*Klasifikasi* \nTanaman diklasifikasikan sebagai Keladi, _Caladium_ \n\n*Bagian beracun* \nSemua bagian tanaman mengandung kalsium oksalat \n\n*Gejala yang ditimbulkan* \nIritasi parah pada selaput lendir menghasilkan pembengkakan lidah, bibir dan langitlangit", parse_mode=telegram.ParseMode.MARKDOWN_V2)
+        update.message.reply_audio(open('audio/caladium.mp3', 'rb'))
     elif result[0][1] >= 0.8:
         update.message.reply_text("*Klasifikasi* \nTanaman diklasifikasikan sebagai Daun Bahagia, _Dieffenbachia_ \n\n*Bagian beracun* \nSemua bagian tanaman mengandung kalsium oksalat \n\n*Gejala yang ditimbulkan* \nIritasi parah pada selaput lendir menghasilkan pembengkakan lidah, bibir dan langitlangit", parse_mode=telegram.ParseMode.MARKDOWN_V2)
     elif result[0][2] >= 0.8:
@@ -96,11 +99,35 @@ def save(update, context):
         update.message.reply_text("Gagal diklasifikasi")
 
 
+def unknown(update, context):
+    input = update.message.reply_text(update.message.text)
+    update.message.reply_text(
+        "Maaf, perintah '%s' tidak dikenali" % update.message.text)
+
+
+# experimental
+# def aiChat(update, context):
+#     response = openai.Completion.create(
+#         engine="text-ada-001",
+#         prompt='"""\n{}\n"""'.format(update.message.text),
+#         temperature=0,
+#         max_tokens=1200,
+#         top_p=1,
+#         frequency_penalty=0,
+#         presence_penalty=0,
+#         stop=['"""'])
+
+#     update.message.reply_text(response.choices[0].text)
+
+
 # command bot
 updater.dispatcher.add_handler(CommandHandler("start", start))
 updater.dispatcher.add_handler(CommandHandler("info", info))
 updater.dispatcher.add_handler(CommandHandler("show", show))
 updater.dispatcher.add_handler(MessageHandler(Filters.text, unknown))
+
+# experimental
+# updater.dispatcher.add_handler(MessageHandler(Filters.text, aiChat))
 
 # add Message Handler
 updater.dispatcher.add_handler(MessageHandler(Filters.photo, save))

@@ -1,0 +1,53 @@
+{
+    "intents": [
+        {
+            "tag": "selamat",
+            "input": [
+                "selamat",
+                "selamat pagi",
+                "selamat siang",
+                "selamat malam",
+                "halo",
+                "halo"
+            ],
+            "responses": [
+                "selamat pagi",
+                "selamat siang",
+                "selamat malam",
+                "halo",
+                "selamat pagi, ada yang bisa saya bantu?",
+                "selamat siang, ada yang bisa saya bantu?",
+                "selamat malam, ada yang bisa saya bantu?"
+
+            ]
+        },
+        {
+            "tag": "goodbye",
+            "input": [
+                "goodbye",
+                "bye",
+                "selamat tinggal"
+            ],
+            "responses": [
+                "selamat tinggal",
+                "semoga bisa bertemu lagi",
+                "terima kasih telah menggunakan layanan kami"
+            ]
+        },
+        {
+            "tag": "tentang",
+            "input": [
+                "tentang",
+                "apa itu",
+                "siapa kamu",
+                "kamu siapa",
+                "nama kamu",
+                "nama kamu siapa"
+            ],
+            "responses": [
+                "saya adalah chatbot",
+                "saya dibuat oleh kamu"
+            ]
+        }
+    ]
+}
